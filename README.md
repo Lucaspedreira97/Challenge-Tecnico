@@ -1,1 +1,1 @@
-# Challenge-Tecnico
+# Challenge-Técnico
