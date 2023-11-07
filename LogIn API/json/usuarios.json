@@ -1,0 +1,52 @@
+[
+    {
+        "nombre_usuario": "Usuario1",
+        "email": "usuario1@email.com",
+        "contrasena": "contrasena1"
+    },
+    {
+        "nombre_usuario": "Usuario2",
+        "email": "usuario2@email.com",
+        "contrasena": "contrasena2"
+    },
+    {
+        "nombre_usuario": "Usuario3",
+        "email": "usuario3@email.com",
+        "contrasena": "contrasena3"
+    },
+    {
+        "nombre_usuario": "Usuario4",
+        "email": "usuario4@email.com",
+        "contrasena": "contrasena4"
+    },
+    {
+        "nombre_usuario": "Usuario5",
+        "email": "usuario5@email.com",
+        "contrasena": "contrasena5"
+    },
+    {
+        "nombre_usuario": "Usuario6",
+        "email": "usuario6@email.com",
+        "contrasena": "contrasena6"
+    },
+    {
+        "nombre_usuario": "Usuario7",
+        "email": "usuario7@email.com",
+        "contrasena": "contrasena7"
+    },
+    {
+        "nombre_usuario": "Usuario8",
+        "email": "usuario8@email.com",
+        "contrasena": "contrasena8"
+    },
+    {
+        "nombre_usuario": "Usuario9",
+        "email": "usuario9@email.com",
+        "contrasena": "contrasena9"
+    },
+    {
+        "nombre_usuario": "Usuario10",
+        "email": "usuario10@email.com",
+        "contrasena": "contrasena10"
+    }
+]

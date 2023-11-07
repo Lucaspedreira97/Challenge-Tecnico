@@ -1,0 +1,18 @@
+[
+    {
+      "nombre del cliente": "Cliente 1",
+      "producto": "Producto A",
+      "estado": "En proceso"
+    },
+    {
+      "nombre del cliente": "Cliente 2",
+      "producto": "Producto B",
+      "estado": "Completado"
+    },
+    {
+      "nombre del cliente": "Cliente 3",
+      "producto": "Producto C",
+      "estado": "Pendiente"
+    }
+  ]
+  
