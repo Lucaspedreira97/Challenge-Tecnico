@@ -39,7 +39,7 @@ const Pedido = () => {
     )
   );
  };
- export default Pedido;
+ export default Pedido
  
  
  
