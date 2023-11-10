@@ -23,7 +23,6 @@ const Pedido = ({ email }) => {
   return email ? (
     <div className="card" style={{ width: "40rem", border: "3px solid black"}}>
       <div className="card-body">
-        {console.log(pedidosData, "data de pedidos")}
         <h2 className="primary alert-primary" role="primary" style={{ color: 'blue' }}>LISTA DE PEDIDOS</h2>
         {pedidosData?.length > 0 ? (
           pedidosData.map((pedido, index) => (

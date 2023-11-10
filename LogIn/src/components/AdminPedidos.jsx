@@ -3,6 +3,8 @@ import { deletePedidos, pedidos } from "../redux/slice";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
+import { Link } from 'react-router-dom';
+
 
 // eslint-disable-next-line react/prop-types
 const AdminPedidos = ({ email }) => {
@@ -11,7 +13,6 @@ const AdminPedidos = ({ email }) => {
   const [localPedidosData, setLocalPedidosData] = useState([]);
 
   useEffect(() => {
-    console.log(pedidosData)
     if (email) {
       dispatch(pedidos(email))
         .then((data) => {
@@ -28,7 +29,6 @@ const AdminPedidos = ({ email }) => {
   }, [dispatch, email]);
 
   const handleDeletePedido = (email, id) => {
-    console.log(id);
     if (email, id) {
       dispatch(deletePedidos({ email, id }))
         .then(() => {
@@ -54,7 +54,7 @@ const AdminPedidos = ({ email }) => {
   return email ? (
     <div className="card" style={{ width: "40rem", border: "3px solid black" }}>
       <div className="card-body">
-        <h2 className="primary alert-primary" role="primary" style={{ color: 'blue' }}>PEDIDOS DE USUARIOS</h2>
+        <h2 className="primary alert-primary" role="primary" style={{ color: 'blue' }}>PEDIDOS DE {email}</h2>
         {localPedidosData && localPedidosData.length > 0 ? (
           localPedidosData.map((pedido, index) => (
             <div className="card" key={index}>
@@ -70,6 +70,9 @@ const AdminPedidos = ({ email }) => {
           <h1>No hay más pedidos cargados</h1>
         )}
       </div>
+      <Link className="text-center" to="/home">
+        <h3 className="display-8" style={{margin:"1.5rem"}}>Volver atrás</h3>
+      </Link>
     </div>
   ) : (
     <p>Cargando...</p>

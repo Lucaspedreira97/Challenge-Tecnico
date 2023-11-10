@@ -6,7 +6,7 @@ const generateUniqueId = (() => {
   let id = 0;
   return () => id++ + Math.random().toString(36).substr(2);
 })();
-
+//Login crea en DB mediante File System los usuarios que se logean con Auth0 y les añade pedidos predefinidos
 const login = async (req, res) => {
   const { username, email } = req.body;
   try {
@@ -35,28 +35,28 @@ const login = async (req, res) => {
         nombre_usuario: username,
         email,
         admin: false,
-          pedidos: [
-            {
-              id: generateUniqueId(),
-              nombre_pedido: "Turbo",
-              estado: "pendiente",
-            },
-            {
-              id: generateUniqueId(),
-              nombre_pedido: "Radiador",
-              estado: "entregado",
-            },
-            {
-              id: generateUniqueId(),
-              nombre_pedido: "Cubierta",
-              estado: "cancelado",
-            },
-            {
-              id: generateUniqueId(),
-              nombre_pedido: "Tapa de Leva",
-              estado: "entregado",
-            },
-          ],
+        pedidos: [
+          {
+            id: generateUniqueId(),
+            nombre_pedido: "Turbo",
+            estado: "pendiente",
+          },
+          {
+            id: generateUniqueId(),
+            nombre_pedido: "Radiador",
+            estado: "entregado",
+          },
+          {
+            id: generateUniqueId(),
+            nombre_pedido: "Cubierta",
+            estado: "cancelado",
+          },
+          {
+            id: generateUniqueId(),
+            nombre_pedido: "Tapa de Leva",
+            estado: "entregado",
+          },
+        ],
       });
       fs.writeFileSync(jsonFilePath, JSON.stringify(users, null, 2), "utf8");
       await res.send(existingUser);
@@ -67,18 +67,16 @@ const login = async (req, res) => {
   }
 };
 
-
+//getPedidos consume los pedidos creados anteriormente
 const getPedidos = async (req, res) => {
   try {
     const { email } = req.body;
-    console.log(email, "back username pedidos");
     const users = JSON.parse(fs.readFileSync(jsonFilePath)); // Lee los datos actuales del archivo JSON
 
     // Busca al usuario en el array de usuarios
     const user = users.find((user) => user.email === email);
 
     if (user) {
-      console.log(user.pedidos.length, "aca pedidos");
       // Si el usuario existe, verifica si es administrador
       if (user.admin) {
         // Si el usuario es administrador, devuelve todos los pedidos
@@ -99,11 +97,10 @@ const getPedidos = async (req, res) => {
     }
   } catch (error) {
     console.error("Error en la función 'getPedidos':", error);
-    // Maneja errores aquí
   }
 };
 
-
+//deletePedidos busca por id de pedido  y email al usuario y permite eliminar de DB el pedido seleccionado
 const deletePedido = async (req, res) => {
   try {
     const { email, id } = req.body;
@@ -118,9 +115,13 @@ const deletePedido = async (req, res) => {
       // Si el usuario existe, verifica si es administrador
       if (user.admin) {
         // Si el usuario es administrador, busca el pedido en el array de pedidos de todos los usuarios
-        const userWithPedido = users.find((user) => user.pedidos.find((pedido) => pedido.id === id));
+        const userWithPedido = users.find((user) =>
+          user.pedidos.find((pedido) => pedido.id === id)
+        );
         if (userWithPedido) {
-          const pedidoIndex = userWithPedido.pedidos.findIndex((pedido) => pedido.id === id);
+          const pedidoIndex = userWithPedido.pedidos.findIndex(
+            (pedido) => pedido.id === id
+          );
           if (pedidoIndex !== -1) {
             // Si el pedido existe, lo elimina del array de pedidos del usuario
             userWithPedido.pedidos.splice(pedidoIndex, 1);
@@ -137,7 +138,9 @@ const deletePedido = async (req, res) => {
         }
       } else {
         // Si el usuario no es administrador, busca el pedido en el array de pedidos del usuario
-        const pedidoIndex = user.pedidos.findIndex((pedido) => pedido.id === id);
+        const pedidoIndex = user.pedidos.findIndex(
+          (pedido) => pedido.id === id
+        );
 
         if (pedidoIndex !== -1) {
           // Si el pedido existe, lo elimina del array de pedidos del usuario
@@ -159,9 +162,7 @@ const deletePedido = async (req, res) => {
     }
   } catch (error) {
     console.error("Error en la función 'deletePedido':", error);
-    // Maneja errores aquí
   }
 };
-
 
 module.exports = { login, getPedidos, deletePedido };
