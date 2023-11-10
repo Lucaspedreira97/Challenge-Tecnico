@@ -92,4 +92,42 @@ const getPedidos = async (req, res) => {
   }
 };
 
-module.exports = { login, getPedidos };
+const deletePedido = async (req, res) => {
+  try {
+    const { email, id } = req.body;
+
+    console.log(email,id, "back username delete pedidos");
+    const users = JSON.parse(fs.readFileSync(jsonFilePath)); // Lee los datos actuales del archivo JSON
+
+    // Busca al usuario en el array de usuarios
+    const user = users.find((user) => user.email === email);
+
+    if (user) {
+      // Si el usuario existe, busca el pedido en el array de pedidos del usuario
+      const pedidoIndex = user.pedidos.findIndex((pedido) => pedido.id === id);
+
+      if (pedidoIndex !== -1) {
+        // Si el pedido existe, lo elimina del array de pedidos del usuario
+        user.pedidos.splice(pedidoIndex, 1);
+
+        // Guarda los datos actualizados en el archivo JSON
+        fs.writeFileSync(jsonFilePath, JSON.stringify(users));
+
+        // Devuelve un mensaje indicando que el pedido se eliminó correctamente
+        await res.send({ message: "El pedido se eliminó correctamente." });
+      } else {
+        // Si el pedido no existe, devuelve un mensaje de error
+        await res.send({ message: "El pedido no existe." });
+      }
+    } else {
+      // Si el usuario no existe, devuelve un mensaje de error
+      await res.send({ message: "El usuario no existe." });
+    }
+  } catch (error) {
+    console.error("Error en la función 'deletePedido':", error);
+    // Maneja errores aquí
+  }
+};
+
+
+module.exports = { login, getPedidos, deletePedido };
