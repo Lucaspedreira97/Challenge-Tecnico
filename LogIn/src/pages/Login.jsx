@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import LoginButton from "../components/Auth0login";
 import { useAuth0 } from "@auth0/auth0-react";
 import { loginUsers } from "../redux/slice";
@@ -12,7 +12,6 @@ const Login = () => {
   useEffect(() => {
     console.log("El componente se montó");
     if (isAuthenticated) {
-      console.log(auth0User);
       dispatch(
         loginUsers({
           username: auth0User?.nickname,

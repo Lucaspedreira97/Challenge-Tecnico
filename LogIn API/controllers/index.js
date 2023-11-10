@@ -18,8 +18,16 @@ const login = async (req, res) => {
 
     if (existingUser) {
       console.log("El usuario ya existe.");
-      // En lugar de enviar un mensaje, envía el usuario existente
-      await res.send(existingUser);
+      // Verifica si el usuario es administrador
+      if (existingUser.admin) {
+        // Si el usuario es administrador, envía todos los pedidos
+        const allPedidos = users.flatMap((user) => user.pedidos);
+        existingUser.pedidos = allPedidos; // Asigna todos los pedidos al usuario administrador
+        await res.send(existingUser);
+      } else {
+        // Si el usuario no es administrador, envía el usuario existente
+        await res.send(existingUser);
+      }
     } else {
       // Si el usuario no existe, lo agrega al array de usuarios
       users.push({
@@ -27,41 +35,38 @@ const login = async (req, res) => {
         nombre_usuario: username,
         email,
         admin: false,
-        pedidos: [
-          {
-            id:  generateUniqueId(),
-            nombre_pedido: "Turbo",
-            estado: "pendiente",
-          },
-          {
-            id:  generateUniqueId(),
-            nombre_pedido: "Radiador",
-            estado: "entregado",
-          },
-          {
-            id:  generateUniqueId(),
-            nombre_pedido: "Cubierta",
-            estado: "cancelado",
-          },
-          {
-            id:  generateUniqueId(),
-            nombre_pedido: "Tapa de Leva",
-            estado: "entregado",
-          },
-        ],
+          pedidos: [
+            {
+              id: generateUniqueId(),
+              nombre_pedido: "Turbo",
+              estado: "pendiente",
+            },
+            {
+              id: generateUniqueId(),
+              nombre_pedido: "Radiador",
+              estado: "entregado",
+            },
+            {
+              id: generateUniqueId(),
+              nombre_pedido: "Cubierta",
+              estado: "cancelado",
+            },
+            {
+              id: generateUniqueId(),
+              nombre_pedido: "Tapa de Leva",
+              estado: "entregado",
+            },
+          ],
       });
-
-      // Escribe los datos actualizados en el archivo JSON
-      fs.writeFileSync(jsonFilePath, JSON.stringify(users, null, 2));
-
-      console.log("Usuarios actualizados:", users);
-      await res.send(users);
+      fs.writeFileSync(jsonFilePath, JSON.stringify(users, null, 2), "utf8");
+      await res.send(existingUser);
     }
   } catch (error) {
-    console.error("Error en la función 'login':", error);
-    // Maneja errores aquí
+    console.error("Ocurrió un error:", error);
+    res.status(500).send("Ocurrió un error al iniciar sesión.");
   }
 };
+
 
 const getPedidos = async (req, res) => {
   try {
@@ -74,13 +79,19 @@ const getPedidos = async (req, res) => {
 
     if (user) {
       console.log(user.pedidos.length, "aca pedidos");
-      // Si el usuario existe, verifica si tiene pedidos
-      if (user.pedidos.length === 0) {
-        // Si el usuario no tiene pedidos, devuelve un mensaje indicando que no tiene pedidos
-        await res.send({ message: "El usuario no tiene pedidos." });
+      // Si el usuario existe, verifica si es administrador
+      if (user.admin) {
+        // Si el usuario es administrador, devuelve todos los pedidos
+        const allPedidos = users.flatMap((user) => user.pedidos);
+        await res.send(allPedidos);
       } else {
-        // Si el usuario tiene pedidos, devuelve sus pedidos
-        await res.send(user.pedidos);
+        // Si el usuario no es administrador y tiene pedidos, devuelve sus pedidos
+        if (user.pedidos.length > 0) {
+          await res.send(user.pedidos);
+        } else {
+          // Si el usuario no es administrador y no tiene pedidos, devuelve un mensaje indicando que no tiene pedidos
+          await res.send({ message: "El usuario no tiene pedidos." });
+        }
       }
     } else {
       // Si el usuario no existe, devuelve un mensaje de error
@@ -92,32 +103,55 @@ const getPedidos = async (req, res) => {
   }
 };
 
+
 const deletePedido = async (req, res) => {
   try {
     const { email, id } = req.body;
 
-    console.log(email,id, "back username delete pedidos");
-    const users = JSON.parse(fs.readFileSync(jsonFilePath)); // Lee los datos actuales del archivo JSON
+    console.log(email, id, "back username delete pedidos");
+    let users = JSON.parse(fs.readFileSync(jsonFilePath)); // Lee los datos actuales del archivo JSON
 
     // Busca al usuario en el array de usuarios
     const user = users.find((user) => user.email === email);
 
     if (user) {
-      // Si el usuario existe, busca el pedido en el array de pedidos del usuario
-      const pedidoIndex = user.pedidos.findIndex((pedido) => pedido.id === id);
+      // Si el usuario existe, verifica si es administrador
+      if (user.admin) {
+        // Si el usuario es administrador, busca el pedido en el array de pedidos de todos los usuarios
+        const userWithPedido = users.find((user) => user.pedidos.find((pedido) => pedido.id === id));
+        if (userWithPedido) {
+          const pedidoIndex = userWithPedido.pedidos.findIndex((pedido) => pedido.id === id);
+          if (pedidoIndex !== -1) {
+            // Si el pedido existe, lo elimina del array de pedidos del usuario
+            userWithPedido.pedidos.splice(pedidoIndex, 1);
 
-      if (pedidoIndex !== -1) {
-        // Si el pedido existe, lo elimina del array de pedidos del usuario
-        user.pedidos.splice(pedidoIndex, 1);
+            // Guarda los datos actualizados en el archivo JSON
+            fs.writeFileSync(jsonFilePath, JSON.stringify(users));
 
-        // Guarda los datos actualizados en el archivo JSON
-        fs.writeFileSync(jsonFilePath, JSON.stringify(users));
-
-        // Devuelve un mensaje indicando que el pedido se eliminó correctamente
-        await res.send({ message: "El pedido se eliminó correctamente." });
+            // Devuelve un mensaje indicando que el pedido se eliminó correctamente
+            await res.send({ message: "El pedido se eliminó correctamente." });
+          } else {
+            // Si el pedido no existe, devuelve un mensaje de error
+            await res.send({ message: "El pedido no existe." });
+          }
+        }
       } else {
-        // Si el pedido no existe, devuelve un mensaje de error
-        await res.send({ message: "El pedido no existe." });
+        // Si el usuario no es administrador, busca el pedido en el array de pedidos del usuario
+        const pedidoIndex = user.pedidos.findIndex((pedido) => pedido.id === id);
+
+        if (pedidoIndex !== -1) {
+          // Si el pedido existe, lo elimina del array de pedidos del usuario
+          user.pedidos.splice(pedidoIndex, 1);
+
+          // Guarda los datos actualizados en el archivo JSON
+          fs.writeFileSync(jsonFilePath, JSON.stringify(users));
+
+          // Devuelve un mensaje indicando que el pedido se eliminó correctamente
+          await res.send({ message: "El pedido se eliminó correctamente." });
+        } else {
+          // Si el pedido no existe, devuelve un mensaje de error
+          await res.send({ message: "El pedido no existe." });
+        }
       }
     } else {
       // Si el usuario no existe, devuelve un mensaje de error

@@ -30,7 +30,7 @@ const userSlice = createSlice({
           email: action.payload.email,
           pedidos: action.payload.pedidos ? action.payload.pedidos : [], // Asegura que 'pedidos' exista antes de acceder a sus propiedades
         };
-        console.log(action.payload.nombre_usuario);
+        console.log(action.payload.admin);
       })
       .addCase(loginUsers.rejected, (state, action) => {
         state.loading = false;
@@ -75,7 +75,6 @@ export const loginUsers = createAsyncThunk(
           email: email,
         }),
       });
-
       console.log(response, "aca response");
       return await response.json();
     } catch (error) {
