@@ -5,27 +5,23 @@
     "email": "pedreiralucasm@gmail.com",
     "admin": false,
     "pedidos": [
-      {
-        "id": "12rbd697koba",
-        "nombre_pedido": "Turbo",
-        "estado": "pendiente"
-      },
-      {
-        "id": "291v1o53p9yq",
-        "nombre_pedido": "Radiador",
-        "estado": "entregado"
-      },
-      {
-        "id": "3pmwelwvw4z",
-        "nombre_pedido": "Cubierta",
-        "estado": "cancelado"
-      },
-      {
-        "id": "4hihaarka62g",
-        "nombre_pedido": "Tapa de Leva",
-        "estado": "entregado"
-      }
-    ]
+        { "id": "1mpr6dnxxtie", "nombre_pedido": "Turbo", "estado": "pendiente" },
+        {
+          "id": "2nzwt8x3tr1a",
+          "nombre_pedido": "Radiador",
+          "estado": "entregado"
+        },
+        {
+          "id": "3jpss8mp15u8",
+          "nombre_pedido": "Cubierta",
+          "estado": "cancelado"
+        },
+        {
+          "id": "4ktfdsr576tl",
+          "nombre_pedido": "Tapa de Leva",
+          "estado": "entregado"
+        }
+      ]
   },
   {
     "id": "0vp9bvnwmbse",
@@ -40,16 +36,6 @@
     "email": "bissppolaris@gmail.com",
     "admin": false,
     "pedidos": [
-      {
-        "id": "138qk7mrk0l7",
-        "nombre_pedido": "Turbo",
-        "estado": "pendiente"
-      },
-      {
-        "id": "2bwpf9seuned",
-        "nombre_pedido": "Radiador",
-        "estado": "entregado"
-      },
       {
         "id": "358h2ktfpjhe",
         "nombre_pedido": "Cubierta",
@@ -68,11 +54,7 @@
     "email": "usuario@prueba.com",
     "admin": false,
     "pedidos": [
-      {
-        "id": "18qeiqfnry5n",
-        "nombre_pedido": "Turbo",
-        "estado": "pendiente"
-      },
+      { "id": "18qeiqfnry5n", "nombre_pedido": "Turbo", "estado": "pendiente" },
       {
         "id": "22ge46333c2k",
         "nombre_pedido": "Radiador",
@@ -96,11 +78,7 @@
     "email": "usuario1@prueba.com",
     "admin": false,
     "pedidos": [
-      {
-        "id": "1vd46vclzri",
-        "nombre_pedido": "Turbo",
-        "estado": "pendiente"
-      },
+      { "id": "1vd46vclzri", "nombre_pedido": "Turbo", "estado": "pendiente" },
       {
         "id": "2nx4lueh3viq",
         "nombre_pedido": "Radiador",
@@ -124,11 +102,7 @@
     "email": "usuario2@prueba.com",
     "admin": false,
     "pedidos": [
-      {
-        "id": "1mpr6dnxxtie",
-        "nombre_pedido": "Turbo",
-        "estado": "pendiente"
-      },
+      { "id": "1mpr6dnxxtie", "nombre_pedido": "Turbo", "estado": "pendiente" },
       {
         "id": "2nzwt8x3tr1a",
         "nombre_pedido": "Radiador",
@@ -152,16 +126,7 @@
     "email": "usuario3@prueba.com",
     "admin": false,
     "pedidos": [
-      {
-        "id": "128k933zqpm1",
-        "nombre_pedido": "Turbo",
-        "estado": "pendiente"
-      },
-      {
-        "id": "2hb5h40ozjqh",
-        "nombre_pedido": "Radiador",
-        "estado": "entregado"
-      },
+      { "id": "128k933zqpm1", "nombre_pedido": "Turbo", "estado": "pendiente" },
       {
         "id": "33sgbcd5il4s",
         "nombre_pedido": "Cubierta",
@@ -180,11 +145,7 @@
     "email": "usuario4@prueba.com",
     "admin": false,
     "pedidos": [
-      {
-        "id": "1zr6udftvm9",
-        "nombre_pedido": "Turbo",
-        "estado": "pendiente"
-      },
+      { "id": "1zr6udftvm9", "nombre_pedido": "Turbo", "estado": "pendiente" },
       {
         "id": "2kto3yigkrw",
         "nombre_pedido": "Radiador",
