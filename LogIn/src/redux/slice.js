@@ -3,22 +3,17 @@ const initialState = {
   loading: false,
   error: "",
   user: {
-    id:null,
-    nombre_usuario:null,
+    id: null,
+    nombre_usuario: null,
     email: null,
     admin: false,
-    pedidos:[]
   },
 };
 
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {
-    // deletePedidos: (state, action) => {
-    //   state.user.pedidos = action.payload;
-    // }
-  },
+  reducers: {},
   extraReducers: (builder) =>
     builder
       .addCase(loginUsers.pending, (state) => {
@@ -29,14 +24,14 @@ const userSlice = createSlice({
         state.user = {
           ...state.user,
           ...action.payload.user,
-          id:action.payload.id,
+          id: action.payload.id,
           nombre_usuario: action.payload.nombre_usuario,
           admin: action.payload.admin,
           email: action.payload.email,
-          pedidos: action.payload.pedidos ? action.payload.pedidos : [] // Asegura que 'pedidos' exista antes de acceder a sus propiedades
+          pedidos: action.payload.pedidos ? action.payload.pedidos : [], // Asegura que 'pedidos' exista antes de acceder a sus propiedades
         };
-        console.log(action.payload.nombre_usuario)
-      })      
+        console.log(action.payload.nombre_usuario);
+      })
       .addCase(loginUsers.rejected, (state, action) => {
         state.loading = false;
         state.error = action.requestStatus;
@@ -49,6 +44,17 @@ const userSlice = createSlice({
         state.pedidos = action.payload;
       })
       .addCase(pedidos.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.requestStatus;
+      })
+      .addCase(deletePedidos.pending, (state) => {
+        state.loadingPedidos = true;
+      })
+      .addCase(deletePedidos.fulfilled, (state, action) => {
+        state.loadingPedidos = false;
+        state.pedidos = action.payload;
+      })
+      .addCase(deletePedidos.rejected, (state, action) => {
         state.loadingPedidos = false;
         state.errorPedidos = action.error.message;
       }),
@@ -59,7 +65,6 @@ export const loginUsers = createAsyncThunk(
   "user/login",
   async ({ username, email }) => {
     try {
-      console.log({ username, email });
       const response = await fetch("http://localhost:3001/login", {
         method: "POST",
         headers: {
@@ -79,16 +84,31 @@ export const loginUsers = createAsyncThunk(
   }
 );
 
-export const pedidos = createAsyncThunk(
-  "pedido/getPedidos",
-  async (email) => {
+export const pedidos = createAsyncThunk("pedido/getPedidos", async (email) => {
+  try {
+    const response = await fetch("http://localhost:3001/getPedidos", {
+      method: "POST", // Cambia el método a POST
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }), // Envía el correo electrónico en el cuerpo
+    });
+    return await response.json();
+  } catch (error) {
+    console.log("error", error.message);
+  }
+});
+
+export const deletePedidos = createAsyncThunk(
+  "pedidos/deletePedidos",
+  async ({ email, id }) => {
     try {
-      const response = await fetch("http://localhost:3001/getPedidos", {
-        method: "POST", // Cambia el método a POST
+      const response = await fetch("http://localhost:3001/deletePedidos", {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email }), // Envía el correo electrónico en el cuerpo
+        body: JSON.stringify({ email, id }), // Envía el correo electrónico en el cuerpo
       });
       return await response.json();
     } catch (error) {
@@ -96,7 +116,5 @@ export const pedidos = createAsyncThunk(
     }
   }
 );
-
-
 
 export default userSlice;

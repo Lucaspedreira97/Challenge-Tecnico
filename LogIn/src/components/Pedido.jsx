@@ -1,15 +1,16 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { pedidos } from "../redux/slice";
 import { useEffect, useState } from "react";
 
-const Pedido = () => {
-  const userData = useSelector((state) => state.user.user);
-  const dispatch = useDispatch()
-  const [pedidosData, setPedidosData] = useState([])
 
+// eslint-disable-next-line react/prop-types
+const Pedido = ({ email }) => {
+  const dispatch = useDispatch();
+  const [pedidosData, setPedidosData] = useState([]);
+ 
   useEffect(() => {
-    if (userData) {
-      dispatch(pedidos(userData.email))
+    if (email) {
+      dispatch(pedidos(email))
         .then((data) => {
           setPedidosData(data.payload);
         })
@@ -17,29 +18,29 @@ const Pedido = () => {
           console.log("error", error.message);
         });
     }
-  }, [dispatch, userData]);
-
-  
-
-  return (
-    userData ? (
-      <div>
+  }, [dispatch, email]);
+ 
+  return email ? (
+    <div className="card" style={{ width: "40rem", border: "3px solid black"}}>
+      <div className="card-body">
         {console.log(pedidosData, "data de pedidos")}
-        <h1>Pedidos de {userData.nombre_usuario}</h1>
-        {userData.pedidos && userData.pedidos.map((pedido, index) => (
-          <div key={index}>
-            <h3>Pedido ID: {pedido.id}</h3>
-            <p>Nombre del pedido: {pedido.nombre_pedido}</p>
-            <p>Estado: {pedido.estado}</p>
-          </div>
-        ))}
+        <h2 className="primary alert-primary" role="primary" style={{ color: 'blue' }}>PEDIDOS DE USUARIOS</h2>
+        {pedidosData?.length > 0 ? (
+          pedidosData.map((pedido, index) => (
+            <div className="card" key={index}>
+              <h4 className="card-text"><strong>Nombre del pedido: </strong>{pedido.nombre_pedido}</h4>
+              <h4 className="card-text"><strong>Estado: </strong>{pedido.estado}</h4>
+            </div>
+          ))
+        ) : (
+          <h1>No hay pedidos</h1>
+        )}
       </div>
-    ) : (
-      <p>Cargando...</p>
-    )
+    </div>
+  ) : (
+    <p>Cargando...</p>
   );
  };
- export default Pedido
  
- 
+ export default Pedido;
  
